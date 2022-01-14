@@ -20,7 +20,7 @@ SegmentTrack_v4.0 was developed on the operative system Linux Ubuntu 20.04 64-bi
 - Install SegmentTrack_v4.0:
 	Clone the repository and put all the files in a folder, then open a terminal (or the cmd command
 	prompt for Windows users) and move into the folder and run the command 'python3 setup1.py build_ext --inplace'
-	and then run 'python3 setup2.py build_ext --inplace'
+	and then run 'python3 setup2.py build_ext --inplace'.
 	This will compile the Cython files.
 
 - Run SegmentTrack_v4.0:
