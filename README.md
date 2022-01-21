@@ -5,7 +5,7 @@ This software is written in Python™ 3.8.
 SegmentTrack_v4.0 is a software package that allows to follow transcriptional activation in early drosophila embryo
     during a single cell cycle.
 
-SegmentTrack_v4.0 was developed on the operative system Linux Ubuntu 20.04 64-bit
+SegmentTrack_v4.0 was developed on the operating system Linux Ubuntu 20.04 64-bit
     and tested on Linux Ubuntu 18.04 and 20.04 64-bit, Windows 8.1 Professional, Windows 10 Professional and
     McOs High Sierra 10.13.6.
 
