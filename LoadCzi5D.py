@@ -18,7 +18,8 @@ class LoadCzi5D:
         file_array  =  np.squeeze(czifile.imread(fname))
 
         if len(file_array.shape)  == 5:                                                             # case you have more than a time frame
-            c, steps, z, x_len, y_len  =  file_array.shape
+            # c, steps, z, x_len, y_len  =  file_array.shape
+            steps, c, z, x_len, y_len  =  file_array.shape
 
             # pbar  =  ProgressBar(total1=steps)
             # pbar.show()
@@ -29,10 +30,13 @@ class LoadCzi5D:
             for t in range(steps):                                                                  # maximum intensity projection
                 # pbar.update_progressbar(t)
                 for x in range(x_len):
-                    red_mtx[t, x, :]    =  file_array[nucs_spts_ch[0], t, :, x, :].max(0)
-                    green_mtx[t, x, :]  =  file_array[nucs_spts_ch[1], t, :, x, :].max(0)
+                    # red_mtx[t, x, :]    =  file_array[nucs_spts_ch[0], t, :, x, :].max(0)
+                    # green_mtx[t, x, :]  =  file_array[nucs_spts_ch[1], t, :, x, :].max(0)
+                    red_mtx[t, x, :]    =  file_array[t, nucs_spts_ch[0], :, x, :].max(0)
+                    green_mtx[t, x, :]  =  file_array[t, nucs_spts_ch[1], :, x, :].max(0)
             # pbar.close()
-            self.green4D  =  file_array[0, :, :, :, :]
+            # self.green4D  =  file_array[0, :, :, :, :]
+            self.green4D  =  file_array[:, 0, :, :, :]
 
         else:                                                                                       # case you have just one time frame
             c, z, x_len, y_len  =  file_array.shape

@@ -17,6 +17,8 @@ from natsort import natsorted
 
 import LoadCzi5D
 
+from xml.etree import ElementTree as ET
+
 
 class MultiProcLoadCzi5D:
     """Multiprocesses the load multi czi function"""
@@ -93,13 +95,29 @@ class MultiProcLoadCzi5D:
             a      =  CziFile(str(fnames[0]))                                                                                   # read info about pixel size
             b      =  a.metadata()
 
-            start     =  b.find("ScalingX")
-            end       =  b[start + 9:].find("ScalingX")
-            pix_size  =  np.round(float(b[start + 9:start + 7 + end]) * 1000000, decimals=4)
+            # in place of the original code, extract the pixel scaling from the Metadata's Scaling section
+            # In our case, the Metadata is expressed as an string of XML, which we must parse
+            pix_size = 0.
+            pix_size_Z = 0.
+            xmlRoot = ET.fromstring(b)
+            for scaling in xmlRoot.iter("Scaling"):
+                for axis in scaling.iter("Distance"):
+                    if axis.attrib["Id"] == "X":
+                        pix_size = np.round(float(axis.find('Value').text) * 1000000., decimals=4)
+                    elif axis.attrib["Id"] == 'Z':
+                        pix_size_Z = np.round(float(axis.find('Value').text) * 1000000., decimals=4)
 
-            start_Z     =  b.find("ScalingZ")
-            end_Z       =  b[start_Z + 9:].find("ScalingZ")
-            pix_size_Z  =  np.round(float(b[start_Z + 9:start_Z + 7 + end_Z]) * 1000000, decimals=4)
+            # crash here if the metadata did't have what we need in the form we expect
+            assert isinstance(pix_size, float) and pix_size > 0.
+            assert isinstance(pix_size_Z, float) and pix_size_Z > 0.
+
+            # start     =  b.find("ScalingX")
+            # end       =  b[start + 9:].find("ScalingX")
+            # pix_size  =  np.round(float(b[start + 9:start + 7 + end]) * 1000000, decimals=4)
+
+            # start_Z     =  b.find("ScalingZ")
+            # end_Z       =  b[start_Z + 9:].find("ScalingZ")
+            # pix_size_Z  =  np.round(float(b[start_Z + 9:start_Z + 7 + end_Z]) * 1000000, decimals=4)
 
             self.time_steps       =  time_steps
             self.pix_size         =  pix_size
